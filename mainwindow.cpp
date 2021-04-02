@@ -5,6 +5,8 @@
 #include <QTextStream>
 #include <QByteArray>
 #include <QCheckBox>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 #include <KTextEdit>
 #include <KLocalizedString>
@@ -15,26 +17,25 @@
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent), fileName(QString())
+MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
 {
-  textArea = new KTextEdit();
-  QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
-  setCentralWidget(flipInputVert);
-  
-  setupActions();
+  setCentralWidget(createOptionBox());
 }
 
 void MainWindow::setupActions()
 {
-    QAction *clearAction = new QAction(this);
-    clearAction->setText(i18n("&Clear"));
-    clearAction->setIcon(QIcon::fromTheme("document-new"));
-    actionCollection()->setDefaultShortcut(clearAction, Qt::CTRL + Qt::Key_W);
-    actionCollection()->addAction("clear", clearAction);
-    connect(clearAction, &QAction::triggered, textArea, &KTextEdit::clear);
-    
     KStandardAction::quit(qApp, &QCoreApplication::quit, actionCollection());
     setupGUI(Default, "kamflipui.rc");
 }
 
-
+QGroupBox* MainWindow::createOptionBox()
+{
+  QGroupBox *groupBox = new QGroupBox(tr("Options"));
+  QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
+  QCheckBox *setGreyscale = new QCheckBox("Greyscale");
+  QVBoxLayout *vbox = new QVBoxLayout;
+  vbox->addWidget(flipInputVert);
+  vbox->addWidget(setGreyscale);
+  groupBox->setLayout(vbox);
+  return groupBox;
+}

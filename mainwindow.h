@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
  
 #include <KXmlGuiWindow>
+#include <QGroupBox>
 
 class KTextEdit;
 class KJob;
@@ -17,8 +18,8 @@ private:
     void setupActions();
 
 private:
-    KTextEdit *textArea;
-    QString fileName;
+    QGroupBox *createOptionBox();
+
 };
 
 #endif // MAINWINDOW_H
