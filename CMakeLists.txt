@@ -40,10 +40,8 @@ target_link_libraries(kamflip
     KF5::CoreAddons
     KF5::I18n
     KF5::XmlGui
-    KF5::TextWidgets
     KF5::ConfigWidgets
     KF5::WidgetsAddons
-    KF5::KIOCore
 )
 
 install(TARGETS kamflip ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

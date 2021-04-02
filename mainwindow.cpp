@@ -10,7 +10,6 @@
 #include <KLocalizedString>
 #include <KActionCollection>
 #include <KStandardAction>
-#include <KIO/Job>
 
 #include "mainwindow.h"
 
