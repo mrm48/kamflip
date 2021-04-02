@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QByteArray>
+#include <QCheckBox>
 
 #include <KTextEdit>
 #include <KLocalizedString>
@@ -17,7 +18,8 @@
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent), fileName(QString())
 {
   textArea = new KTextEdit();
-  setCentralWidget(textArea);
+  QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
+  setCentralWidget(flipInputVert);
   
   setupActions();
 }
