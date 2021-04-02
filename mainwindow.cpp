@@ -26,16 +26,23 @@ void MainWindow::setupActions()
 
 QGroupBox* MainWindow::createOptionBox()
 {
+
+  // Instantiate group
   QGroupBox *groupBox = new QGroupBox(tr("Options"));
+
+  // Instantiate checkboxes for various filters / options
   QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
   QCheckBox *setGreyscale = new QCheckBox("Greyscale");
+  
+  // Set up Dropdowns
   QComboBox *setWebcam = new QComboBox(this);
   QComboBox *setLoopback = new QComboBox(this);
-  //QStringList *device = new QStringList("/dev/video0");
+  QStringList device = *(new QStringList("/dev/video0")); // TODO: populate this list with potential devices
+  QStringList loopback = *(new QStringList("/dev/video2")); // TODO: populate this list with potential devices
   QLabel *webcamLabel = new QLabel("Webcam:", this);
   QLabel *loopbackLabel = new QLabel("Loopback device:", this);
-  setWebcam->insertItems(0, QStringList("/dev/video0"));
-  setLoopback->insertItems(0, QStringList("/dev/video2"));
+  setWebcam->insertItems(0, device);
+  setLoopback->insertItems(0, loopback);
   webcamLabel->setBuddy(setWebcam);
   loopbackLabel->setBuddy(setLoopback);
   QHBoxLayout *hbox = new QHBoxLayout;
@@ -44,11 +51,16 @@ QGroupBox* MainWindow::createOptionBox()
   QHBoxLayout *loopBox = new QHBoxLayout;
   loopBox->addWidget(loopbackLabel);
   loopBox->addWidget(setLoopback);
+
+  // Set up vertical layout
+  // 1. Checkboxes 2. labels and dropdowns
   QVBoxLayout *vbox = new QVBoxLayout;
   vbox->addWidget(flipInputVert);
   vbox->addWidget(setGreyscale);
   vbox->addLayout(hbox);
   vbox->addLayout(loopBox);
+
+  // return layout - vbox is wrapper around 1. Checkboxes and 2. horizontal layouts containing labels and dropdowns
   groupBox->setLayout(vbox);
   return groupBox;
 }
