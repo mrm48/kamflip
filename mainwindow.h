@@ -16,6 +16,7 @@ public:
 
 private:
     void setupActions();
+    QStringList getDevices();
 
 private:
     QGroupBox *createOptionBox();

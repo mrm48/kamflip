@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QProcess>
 
 #include <KLocalizedString>
 #include <KActionCollection>
@@ -41,8 +42,8 @@ QGroupBox* MainWindow::createOptionBox()
   QStringList loopback = *(new QStringList("/dev/video2")); // TODO: populate this list with potential devices
   QLabel *webcamLabel = new QLabel("Webcam:", this);
   QLabel *loopbackLabel = new QLabel("Loopback device:", this);
-  setWebcam->insertItems(0, device);
-  setLoopback->insertItems(0, loopback);
+  setWebcam->insertItems(0, getDevices());
+  setLoopback->insertItems(0, getDevices());
   webcamLabel->setBuddy(setWebcam);
   loopbackLabel->setBuddy(setLoopback);
   QHBoxLayout *hbox = new QHBoxLayout;
@@ -63,4 +64,23 @@ QGroupBox* MainWindow::createOptionBox()
   // return layout - vbox is wrapper around 1. Checkboxes and 2. horizontal layouts containing labels and dropdowns
   groupBox->setLayout(vbox);
   return groupBox;
+}
+
+QStringList MainWindow::getDevices()
+{
+  QProcess getDeviceProcess;
+  getDeviceProcess.start("ls", QStringList() << "/dev/");
+  getDeviceProcess.waitForReadyRead(); 
+  QByteArray devices = getDeviceProcess.readAll();
+  QString devicesString = devices.data();
+  QStringList deviceList = *(new QStringList(devicesString.split("\n")));
+  QStringList trimmedDevList = *(new QStringList());
+  QString tempDev = "";
+  QStringListIterator trimIterator(deviceList);
+  while (trimIterator.hasNext()){
+    tempDev = trimIterator.next();
+    if(tempDev.contains("video"))
+      trimmedDevList.append(tempDev);
+  }
+  return trimmedDevList; 
 }
