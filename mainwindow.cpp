@@ -38,8 +38,6 @@ QGroupBox* MainWindow::createOptionBox()
   // Set up Dropdowns
   QComboBox *setWebcam = new QComboBox(this);
   QComboBox *setLoopback = new QComboBox(this);
-  QStringList device = *(new QStringList("/dev/video0")); // TODO: populate this list with potential devices
-  QStringList loopback = *(new QStringList("/dev/video2")); // TODO: populate this list with potential devices
   QLabel *webcamLabel = new QLabel("Webcam:", this);
   QLabel *loopbackLabel = new QLabel("Loopback device:", this);
   setWebcam->insertItems(0, getDevices());
@@ -68,19 +66,25 @@ QGroupBox* MainWindow::createOptionBox()
 
 QStringList MainWindow::getDevices()
 {
+  // Get list of all devices by pulling listing from /dev
   QProcess getDeviceProcess;
   getDeviceProcess.start("ls", QStringList() << "/dev/");
   getDeviceProcess.waitForReadyRead(); 
   QByteArray devices = getDeviceProcess.readAll();
+
+  // Parse output of ls and add devices into an iterator 
   QString devicesString = devices.data();
   QStringList deviceList = *(new QStringList(devicesString.split("\n")));
   QStringList trimmedDevList = *(new QStringList());
   QString tempDev = "";
   QStringListIterator trimIterator(deviceList);
+  
+  // Filter down to only webcams and loopback devices for video
   while (trimIterator.hasNext()){
     tempDev = trimIterator.next();
     if(tempDev.contains("video"))
       trimmedDevList.append(tempDev);
   }
+
   return trimmedDevList; 
 }

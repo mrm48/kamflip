@@ -11,29 +11,15 @@ int main (int argc, char *argv[])
     KLocalizedString::setApplicationDomain("kamflip");
     
     KAboutData aboutData(
-                         // The program name used internally. (componentName)
                          QStringLiteral("kamflip"),
-                         // A displayable program name string. (displayName)
                          i18n("Kamflip"),
-                         // The program version string. (version)
                          QStringLiteral("1.0"),
-                         // Short description of what the app does. (shortDescription)
                          i18n("A simple application for controlling v4l2loopback devices"),
-                         // The license this code is released under
                          KAboutLicense::GPL,
-                         // Copyright Statement (copyrightStatement = QString())
-                         i18n("(c) 2015"),
-                         // Optional text shown in the About box.
-                         // Can contain any information desired. (otherText)
-                         i18n("Some text..."),
-                         // The program homepage string. (homePageAddress = QString())
-                         QStringLiteral("https://example.kde.org/"),
-                         // The bug report email address
-                         // (bugsEmailAddress = QLatin1String("submit@bugs.kde.org")
+                         i18n("(c) 2021"),
+                         i18n("Requires v4l2loopback"),
+                         QStringLiteral("https://github.com/mrm48/kamflip"),
                          QStringLiteral("submit@bugs.kde.org"));
-
-    aboutData.addAuthor(i18n("Name"), i18n("Task"), QStringLiteral("your@email.com"),
-                         QStringLiteral("http://your.website.com"), QStringLiteral("OSC Username"));
 
     KAboutData::setApplicationData(aboutData);
  

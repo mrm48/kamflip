@@ -3,9 +3,6 @@
  
 #include <KXmlGuiWindow>
 #include <QGroupBox>
-
-class KTextEdit;
-class KJob;
  
 class MainWindow : public KXmlGuiWindow
 {
@@ -17,8 +14,6 @@ public:
 private:
     void setupActions();
     QStringList getDevices();
-
-private:
     QGroupBox *createOptionBox();
 
 };
