@@ -1,2 +1,16 @@
 build/
 .vscode/
+
+*.cmake
+
+CMakeCache.txt
+
+CMakeFiles/
+
+kamflip_autogen/
+
+kamflip
+
+Makefile
+
+prefix.sh
