@@ -3,6 +3,7 @@
  
 #include <KXmlGuiWindow>
 #include <QGroupBox>
+#include <QMessageBox>
  
 class MainWindow : public KXmlGuiWindow
 {
@@ -10,6 +11,9 @@ class MainWindow : public KXmlGuiWindow
     
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+
+public slots:
+    void updateFlip(bool);
 
 private:
     void setupActions();

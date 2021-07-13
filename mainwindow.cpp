@@ -14,6 +14,8 @@
 
 #include "mainwindow.h"
 
+QCheckBox *flipInputVert;
+
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
 {
   setCentralWidget(createOptionBox());
@@ -32,7 +34,9 @@ QGroupBox* MainWindow::createOptionBox()
   QGroupBox *groupBox = new QGroupBox(tr("Options"));
 
   // Instantiate checkboxes for various filters / options
-  QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
+  //QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
+  flipInputVert = new QCheckBox("Flip Input Vertically");
+  connect(flipInputVert,SIGNAL(clicked(bool)), this, SLOT(updateFlip(bool)));
   QCheckBox *setGreyscale = new QCheckBox("Greyscale");
   
   // Set up Dropdowns
@@ -87,4 +91,21 @@ QStringList MainWindow::getDevices()
   }
 
   return trimmedDevList; 
+}
+
+// Action when flip checkbox is selected
+void MainWindow::updateFlip(bool value)
+{
+
+  if(value)
+  {
+    QMessageBox msgBox;
+    msgBox.setText("Flip is checked");
+    msgBox.exec();
+  } else
+  {
+    QMessageBox msgBox;
+    msgBox.setText("Flip is unchecked");
+    msgBox.exec();
+  }
 }
