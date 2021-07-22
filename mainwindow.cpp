@@ -15,6 +15,7 @@
 #include "mainwindow.h"
 
 QCheckBox *flipInputVert;
+QCheckBox *setGreyscale;
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
 {
@@ -37,7 +38,8 @@ QGroupBox* MainWindow::createOptionBox()
   //QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
   flipInputVert = new QCheckBox("Flip Input Vertically");
   connect(flipInputVert,SIGNAL(clicked(bool)), this, SLOT(updateFlip(bool)));
-  QCheckBox *setGreyscale = new QCheckBox("Greyscale");
+  setGreyscale = new QCheckBox("Greyscale");
+  connect(setGreyscale,SIGNAL(clicked(bool)), this, SLOT(updateGreyscale(bool)));
   
   // Set up Dropdowns
   QComboBox *setWebcam = new QComboBox(this);
@@ -93,7 +95,7 @@ QStringList MainWindow::getDevices()
   return trimmedDevList; 
 }
 
-// Action when flip checkbox is selected
+// Action when flip checkbox is toggled
 void MainWindow::updateFlip(bool value)
 {
 
@@ -106,6 +108,22 @@ void MainWindow::updateFlip(bool value)
   {
     QMessageBox msgBox;
     msgBox.setText("Flip is unchecked");
+    msgBox.exec();
+  }
+}
+
+// Action when greyscale checkbox is toggled
+void MainWindow::updateGreyscale(bool value)
+{
+  if(value)
+  {
+    QMessageBox msgBox;
+    msgBox.setText("Greyscale is checked");
+    msgBox.exec();
+  } else 
+  {
+    QMessageBox msgBox;
+    msgBox.setText("Greyscale is unchecked");
     msgBox.exec();
   }
 }

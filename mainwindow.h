@@ -14,6 +14,7 @@ public:
 
 public slots:
     void updateFlip(bool);
+    void updateGreyscale(bool);
 
 private:
     void setupActions();

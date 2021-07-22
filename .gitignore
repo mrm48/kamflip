@@ -14,3 +14,5 @@ kamflip
 Makefile
 
 prefix.sh
+
+*.kdev4
