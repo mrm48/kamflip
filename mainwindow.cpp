@@ -96,15 +96,16 @@ QStringList MainWindow::getDevices()
 }
 
 // Action when flip checkbox is toggled
+// TODO: Add call to v4l2 that will flip the camera
 void MainWindow::updateFlip(bool value)
 {
-
   if(value)
   {
     QMessageBox msgBox;
     msgBox.setText("Flip is checked");
     msgBox.exec();
-  } else
+  }
+  else
   {
     QMessageBox msgBox;
     msgBox.setText("Flip is unchecked");
@@ -113,6 +114,7 @@ void MainWindow::updateFlip(bool value)
 }
 
 // Action when greyscale checkbox is toggled
+// TODO: Add call to v4l2 to change output of webcam to black & white
 void MainWindow::updateGreyscale(bool value)
 {
   if(value)
@@ -120,7 +122,8 @@ void MainWindow::updateGreyscale(bool value)
     QMessageBox msgBox;
     msgBox.setText("Greyscale is checked");
     msgBox.exec();
-  } else 
+  }
+  else
   {
     QMessageBox msgBox;
     msgBox.setText("Greyscale is unchecked");
