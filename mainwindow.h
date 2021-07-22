@@ -19,7 +19,7 @@ public slots:
 private:
     void setupActions();
     QStringList getDevices();
-    QGroupBox *createOptionBox();
+    QGroupBox createOptionBox();
 
 };
 

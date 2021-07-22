@@ -14,8 +14,8 @@
 
 #include "mainwindow.h"
 
-QCheckBox *flipInputVert;
-QCheckBox *setGreyscale;
+QCheckBox flipInputVert;
+QCheckBox setGreyscale;
 
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
 {
@@ -28,11 +28,11 @@ void MainWindow::setupActions()
     setupGUI(Default, "kamflipui.rc");
 }
 
-QGroupBox* MainWindow::createOptionBox()
+QGroupBox MainWindow::createOptionBox()
 {
 
   // Instantiate group
-  QGroupBox *groupBox = new QGroupBox(tr("Options"));
+  QGroupBox groupBox;
 
   // Instantiate checkboxes for various filters / options
   //QCheckBox *flipInputVert = new QCheckBox("Flip Input Vertically");
@@ -42,31 +42,31 @@ QGroupBox* MainWindow::createOptionBox()
   connect(setGreyscale,SIGNAL(clicked(bool)), this, SLOT(updateGreyscale(bool)));
   
   // Set up Dropdowns
-  QComboBox *setWebcam = new QComboBox(this);
-  QComboBox *setLoopback = new QComboBox(this);
-  QLabel *webcamLabel = new QLabel("Webcam:", this);
-  QLabel *loopbackLabel = new QLabel("Loopback device:", this);
-  setWebcam->insertItems(0, getDevices());
-  setLoopback->insertItems(0, getDevices());
-  webcamLabel->setBuddy(setWebcam);
-  loopbackLabel->setBuddy(setLoopback);
-  QHBoxLayout *hbox = new QHBoxLayout;
-  hbox->addWidget(webcamLabel);
-  hbox->addWidget(setWebcam);
-  QHBoxLayout *loopBox = new QHBoxLayout;
-  loopBox->addWidget(loopbackLabel);
-  loopBox->addWidget(setLoopback);
+  QComboBox setWebcam;
+  QComboBox setLoopback;
+  QLabel webcamLabel;
+  QLabel loopbackLabel;
+  setWebcam.insertItems(0, getDevices());
+  setLoopback.insertItems(0, getDevices());
+  webcamLabel.setBuddy(setWebcam);
+  loopbackLabel.setBuddy(setLoopback);
+  QHBoxLayout hbox;
+  hbox.addWidget(webcamLabel);
+  hbox.addWidget(setWebcam);
+  QHBoxLayout loopBox;
+  loopBox.addWidget(loopbackLabel);
+  loopBox.addWidget(setLoopback);
 
   // Set up vertical layout
   // 1. Checkboxes 2. labels and dropdowns
-  QVBoxLayout *vbox = new QVBoxLayout;
-  vbox->addWidget(flipInputVert);
-  vbox->addWidget(setGreyscale);
-  vbox->addLayout(hbox);
-  vbox->addLayout(loopBox);
+  QVBoxLayout vbox;
+  vbox.addWidget(flipInputVert);
+  vbox.addWidget(setGreyscale);
+  vbox.addLayout(hbox);
+  vbox.addLayout(loopBox);
 
   // return layout - vbox is wrapper around 1. Checkboxes and 2. horizontal layouts containing labels and dropdowns
-  groupBox->setLayout(vbox);
+  groupBox.setLayout(vbox);
   return groupBox;
 }
 
