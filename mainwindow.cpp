@@ -47,7 +47,7 @@ QGroupBox* MainWindow::createOptionBox()
   QLabel *webcamLabel = new QLabel("Webcam:", this);
   QLabel *loopbackLabel = new QLabel("Loopback device:", this);
   setWebcam->insertItems(0, getDevices());
-  setLoopback->insertItems(0, getDevices());
+  setLoopback->insertItems(0, getLoopback());
   webcamLabel->setBuddy(setWebcam);
   loopbackLabel->setBuddy(setLoopback);
   QHBoxLayout *hbox = new QHBoxLayout;
@@ -74,10 +74,10 @@ QStringList MainWindow::getDevices()
 {
   // Get list of all devices by pulling listing from /dev
   QProcess getDeviceProcess;
-  getDeviceProcess.start("ls", QStringList() << "/dev/");
+  getDeviceProcess.start("ls", { "/dev/" });
   getDeviceProcess.waitForReadyRead(); 
   QByteArray devices = getDeviceProcess.readAll();
-
+  getDeviceProcess.close();
   // Parse output of ls and add devices into an iterator 
   QString devicesString = devices.data();
   QStringList deviceList = *(new QStringList(devicesString.split("\n")));
@@ -92,7 +92,34 @@ QStringList MainWindow::getDevices()
       trimmedDevList.append(tempDev);
   }
 
-  return trimmedDevList; 
+  return trimmedDevList;
+}
+
+QStringList MainWindow::getLoopback()
+{
+  // Get list of all devices by pulling listing from /dev
+  QProcess getDeviceProcess;
+  getDeviceProcess.start("sh", {"-c", "v4l2-ctl --list-devices | sed -n '/v4l2loopback/,+1p'"});
+  getDeviceProcess.waitForReadyRead(); 
+  QByteArray devices = getDeviceProcess.readAll();
+  getDeviceProcess.close();
+  // Parse output of ls and add devices into an iterator 
+  QString devicesString = devices.data();
+  QStringList deviceList = *(new QStringList(devicesString.split("\n")));
+  QStringList trimmedDevList = *(new QStringList());
+  QString tempDev = "";
+  QStringListIterator trimIterator(deviceList);
+  
+  // Filter down to only webcams and loopback devices for video
+  while (trimIterator.hasNext()){
+    tempDev = trimIterator.next();
+    if(tempDev.contains("/dev/")){
+      tempDev = tempDev.remove("/dev/");
+      trimmedDevList.append(tempDev);
+    }
+  }
+
+  return trimmedDevList;
 }
 
 // Action when flip checkbox is toggled
