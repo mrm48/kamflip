@@ -16,3 +16,17 @@ Makefile
 prefix.sh
 
 *.kdev4
+
+kamflip.cflags
+
+kamflip.config
+
+kamflip.creator
+
+kamflip.creator.user
+
+kamflip.cxxflags
+
+kamflip.files
+
+kamflip.includes

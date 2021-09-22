@@ -88,8 +88,9 @@ QStringList MainWindow::getDevices()
   // Filter down to only webcams and loopback devices for video
   while (trimIterator.hasNext()){
     tempDev = trimIterator.next();
-    if(tempDev.contains("video"))
+    if(tempDev.contains("video")){
       trimmedDevList.append(tempDev);
+    }
   }
 
   return trimmedDevList;
@@ -118,7 +119,11 @@ QStringList MainWindow::getLoopback()
       trimmedDevList.append(tempDev);
     }
   }
-
+  if(trimmedDevList.length() == 0){
+    trimmedDevList.append("Error: no loopback found");
+    flipInputVert->setEnabled(false);
+    setGreyscale->setEnabled(false);
+  }
   return trimmedDevList;
 }
 
