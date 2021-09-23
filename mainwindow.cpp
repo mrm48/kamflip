@@ -17,6 +17,8 @@
 QCheckBox *flipInputVert;
 QCheckBox *setGreyscale;
 
+bool debug = false;
+
 MainWindow::MainWindow(QWidget *parent) : KXmlGuiWindow(parent)
 {
   setCentralWidget(createOptionBox());
@@ -133,15 +135,28 @@ void MainWindow::updateFlip(bool value)
 {
   if(value)
   {
-    QMessageBox msgBox;
-    msgBox.setText("Flip is checked");
-    msgBox.exec();
+    QProcess flipProcess;
+    flipProcess.start("sh", {"-c", "ffmpeg', '-f', 'v4l2', '-i', source, '-vf', 'vflip', '-f', 'v4l2', loopback"});
+
+    setGreyscale->setEnabled(false);
+    
+    if(debug){
+      QMessageBox msgBox;
+      msgBox.setText("Flip is checked");    
+      msgBox.exec();
+    }
+
   }
   else
   {
+    setGreyscale->setEnabled(true);
+
+    if(debug){
     QMessageBox msgBox;
-    msgBox.setText("Flip is unchecked");
-    msgBox.exec();
+      msgBox.setText("Flip is unchecked"); 
+      msgBox.exec();
+    }
+
   }
 }
 
@@ -151,14 +166,32 @@ void MainWindow::updateGreyscale(bool value)
 {
   if(value)
   {
-    QMessageBox msgBox;
-    msgBox.setText("Greyscale is checked");
-    msgBox.exec();
+    QProcess flipProcess;
+    flipProcess.start("sh", {"-c", "ffmpeg', '-f', 'v4l2', '-i', source, '-vf', 'eq=gamma=1.5:saturation=0', '-f', 'v4l2', loopback"});
+    flipInputVert->setEnabled(false);
+    
+    if(debug){
+      QMessageBox msgBox;
+      msgBox.setText("Greyscale is checked");
+      msgBox.exec();
+    }
+    
   }
   else
   {
-    QMessageBox msgBox;
-    msgBox.setText("Greyscale is unchecked");
-    msgBox.exec();
+    flipInputVert->setEnabled(true);
+
+    if(debug){
+      QMessageBox msgBox;
+      msgBox.setText("Greyscale is unchecked");
+      msgBox.exec();
+    }
+
   }
+
+}
+
+// Terminate ffmpeg and restart with filters that are selected
+void MainWindow::reapplyFilters(){
+    
 }
