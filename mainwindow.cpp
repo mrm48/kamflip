@@ -16,6 +16,8 @@
 
 QCheckBox *flipInputVert;
 QCheckBox *setGreyscale;
+QComboBox *setWebcam;
+QComboBox *setLoopback;
 
 bool debug = false;
 
@@ -44,8 +46,8 @@ QGroupBox* MainWindow::createOptionBox()
   connect(setGreyscale,SIGNAL(clicked(bool)), this, SLOT(updateGreyscale(bool)));
   
   // Set up Dropdowns
-  QComboBox *setWebcam = new QComboBox(this);
-  QComboBox *setLoopback = new QComboBox(this);
+  setWebcam = new QComboBox(this);
+  setLoopback = new QComboBox(this);
   QLabel *webcamLabel = new QLabel("Webcam:", this);
   QLabel *loopbackLabel = new QLabel("Loopback device:", this);
   setWebcam->insertItems(0, getDevices());
@@ -103,9 +105,11 @@ QStringList MainWindow::getLoopback()
   // Get list of all devices by pulling listing from /dev
   QProcess getDeviceProcess;
   getDeviceProcess.start("sh", {"-c", "v4l2-ctl --list-devices | sed -n '/v4l2loopback/,+1p'"});
-  getDeviceProcess.waitForReadyRead(); 
-  QByteArray devices = getDeviceProcess.readAll();
-  getDeviceProcess.close();
+  QByteArray devices;
+  if(getDeviceProcess.waitForReadyRead()){
+    devices = getDeviceProcess.readAll();
+    getDeviceProcess.close();
+  }
   // Parse output of ls and add devices into an iterator 
   QString devicesString = devices.data();
   QStringList deviceList = *(new QStringList(devicesString.split("\n")));
@@ -133,28 +137,39 @@ QStringList MainWindow::getLoopback()
 // TODO: Add call to v4l2 that will flip the camera
 void MainWindow::updateFlip(bool value)
 {
+
   if(value)
   {
-    QProcess flipProcess;
-    flipProcess.start("sh", {"-c", "ffmpeg', '-f', 'v4l2', '-i', source, '-vf', 'vflip', '-f', 'v4l2', loopback"});
 
+    QProcess flipProcess;
+    flipProcess.start("sh", {"-c", "ffmpeg -f v4l2 -i", setWebcam->currentText(), "-vf vflip -f v4l2 ", setLoopback->currentText()});
+    if(flipProcess.waitForStarted()){
+      flipProcess.waitForReadyRead();
+    }
     setGreyscale->setEnabled(false);
     
     if(debug){
+
       QMessageBox msgBox;
       msgBox.setText("Flip is checked");    
       msgBox.exec();
+
     }
 
   }
+
   else
   {
+
     setGreyscale->setEnabled(true);
 
-    if(debug){
-    QMessageBox msgBox;
+    if(debug)
+    {
+
+      QMessageBox msgBox;
       msgBox.setText("Flip is unchecked"); 
       msgBox.exec();
+
     }
 
   }
@@ -164,27 +179,37 @@ void MainWindow::updateFlip(bool value)
 // TODO: Add call to v4l2 to change output of webcam to black & white
 void MainWindow::updateGreyscale(bool value)
 {
+
   if(value)
   {
+
     QProcess flipProcess;
-    flipProcess.start("sh", {"-c", "ffmpeg', '-f', 'v4l2', '-i', source, '-vf', 'eq=gamma=1.5:saturation=0', '-f', 'v4l2', loopback"});
+    flipProcess.start("sh", {"-c", "ffmpeg -f v4l2 -i ", setWebcam->currentText(), "-vf eq=gamma=1.5:saturation=0 -f v4l2 ", setLoopback->currentText()});
     flipInputVert->setEnabled(false);
     
-    if(debug){
+    if(debug)
+    {
+
       QMessageBox msgBox;
       msgBox.setText("Greyscale is checked");
       msgBox.exec();
+
     }
     
   }
+
   else
   {
+
     flipInputVert->setEnabled(true);
 
-    if(debug){
+    if(debug)
+    {
+
       QMessageBox msgBox;
       msgBox.setText("Greyscale is unchecked");
       msgBox.exec();
+
     }
 
   }
@@ -193,5 +218,9 @@ void MainWindow::updateGreyscale(bool value)
 
 // Terminate ffmpeg and restart with filters that are selected
 void MainWindow::reapplyFilters(){
+
+  QProcess reapplyProcess;
+  reapplyProcess.start("sh", {"-c", "killall ffmpeg"});
+  reapplyProcess.close();
     
 }

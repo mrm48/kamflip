@@ -30,3 +30,5 @@ kamflip.cxxflags
 kamflip.files
 
 kamflip.includes
+
+compile_commands.json
